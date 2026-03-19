@@ -1,14 +1,19 @@
-export default function MarqueeStrip() {
-  const items = [
-    'Free Delivery',
-    'Handcrafted',
-    'Sustainable Materials',
-    'Made to Last',
-    'Designed in Europe',
-    '10-Year Warranty',
-  ]
+interface MarqueeStripProps {
+  items?: string[]
+}
 
-  const repeated = [...items, ...items, ...items, ...items]
+const DEFAULT_ITEMS = [
+  'Free Delivery',
+  'Handcrafted',
+  'Sustainable Materials',
+  'Made to Last',
+  'Designed in Europe',
+  '10-Year Warranty',
+]
+
+export default function MarqueeStrip({ items }: MarqueeStripProps) {
+  const list = items && items.length > 0 ? items : DEFAULT_ITEMS
+  const repeated = [...list, ...list, ...list, ...list]
 
   return (
     <div className="overflow-hidden bg-foreground py-4 border-y border-foreground">

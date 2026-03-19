@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import NavBar from '@/components/ui/NavBar'
 import Footer from '@/components/ui/Footer'
+import { getSettings } from '@/lib/settings'
 
 export const metadata: Metadata = {
   title: {
@@ -51,11 +52,13 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const settings = await getSettings()
+
   return (
     <html lang="en">
       <head>
@@ -67,9 +70,9 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <NavBar />
+        <NavBar siteName={settings.site_name} />
         <main>{children}</main>
-        <Footer />
+        <Footer siteName={settings.site_name} copyright={settings.footer_copyright} />
       </body>
     </html>
   )

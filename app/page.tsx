@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { supabase } from '@/lib/supabase'
 import { Product } from '@/lib/types'
+import { getSettings } from '@/lib/settings'
 import Hero from '@/components/sections/Hero'
 import MarqueeStrip from '@/components/ui/MarqueeStrip'
 import CategoryCards from '@/components/sections/CategoryCards'
@@ -39,7 +40,6 @@ async function getFeaturedProducts(): Promise<Product[]> {
       .eq('featured', true)
       .order('created_at', { ascending: false })
       .limit(8)
-
     if (error) throw error
     return data || []
   } catch {
@@ -48,15 +48,18 @@ async function getFeaturedProducts(): Promise<Product[]> {
 }
 
 export default async function HomePage() {
-  const products = await getFeaturedProducts()
+  const [products, settings] = await Promise.all([
+    getFeaturedProducts(),
+    getSettings(),
+  ])
 
   return (
     <>
-      <Hero />
-      <MarqueeStrip />
+      <Hero settings={settings} />
+      <MarqueeStrip items={settings.marquee_items} />
       <CategoryCards />
       <FeaturedProducts products={products} />
-      <EditorialBanner />
+      <EditorialBanner settings={settings} />
       <WhyChooseUs />
     </>
   )

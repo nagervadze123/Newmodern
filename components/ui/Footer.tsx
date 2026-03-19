@@ -3,10 +3,25 @@
 import Link from 'next/link'
 import { Instagram, Twitter, BookMarked } from 'lucide-react'
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 
-export default function Footer() {
+interface FooterProps {
+  siteName?: string
+  copyright?: string
+}
+
+export default function Footer({
+  siteName = 'Maison & Co',
+  copyright,
+}: FooterProps) {
+  const pathname = usePathname()
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
+
+  // Hide on admin routes
+  if (pathname.startsWith('/admin')) return null
+
+  const copyrightText = copyright || `© ${new Date().getFullYear()} ${siteName}. All rights reserved.`
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,7 +39,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link href="/" className="font-serif text-[26px] font-medium tracking-tighter text-surface block mb-4">
-              Maison & Co
+              {siteName}
             </Link>
             <p className="font-sans text-[14px] text-surface/60 leading-relaxed max-w-xs">
               Heirloom-quality furniture crafted for the discerning home. Sustainably made to last a lifetime.
@@ -137,7 +152,7 @@ export default function Footer() {
         {/* Bottom */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="font-sans text-[12px] text-surface/30">
-            © {new Date().getFullYear()} Maison & Co. All rights reserved.
+            {copyrightText}
           </p>
           <div className="flex items-center gap-6">
             {['Privacy Policy', 'Terms of Service', 'Shipping Policy'].map((item) => (

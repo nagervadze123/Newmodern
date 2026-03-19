@@ -3,21 +3,27 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { SiteSettings, defaultSettings } from '@/lib/settings'
 
-export default function Hero() {
+interface HeroProps {
+  settings?: Partial<SiteSettings>
+}
+
+export default function Hero({ settings }: HeroProps) {
+  const s = { ...defaultSettings, ...settings }
+
   return (
     <section className="relative min-h-screen flex items-end" aria-label="Hero">
       {/* Background image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1800&q=80"
+          src={s.hero_background_image || defaultSettings.hero_background_image}
           alt="Luxury furniture living room — Maison & Co flagship collection"
           fill
           priority
           sizes="100vw"
           className="object-cover"
         />
-        {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent" />
       </div>
 
@@ -40,8 +46,7 @@ export default function Hero() {
             className="font-serif font-light text-surface leading-none tracking-tighter mb-8"
             style={{ fontSize: 'clamp(60px, 9vw, 116px)' }}
           >
-            Objects made to<br />
-            <em className="italic">endure.</em>
+            {s.hero_headline}
           </motion.h1>
 
           <motion.p
@@ -50,8 +55,7 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="font-sans text-[16px] text-surface/70 leading-relaxed max-w-xl mb-10"
           >
-            Heirloom-quality furniture for homes with intention.
-            Each piece is handcrafted by master artisans using sustainably sourced materials.
+            {s.hero_subtitle}
           </motion.p>
 
           <motion.div
@@ -61,10 +65,10 @@ export default function Hero() {
             className="flex flex-wrap items-center gap-4"
           >
             <Link href="/products" className="btn btn-primary text-[12px] px-8 py-4">
-              Shop Collection
+              {s.hero_cta1_text}
             </Link>
             <Link href="/products?featured=true" className="btn btn-ghost-light text-[12px] px-8 py-4">
-              Explore Lookbook
+              {s.hero_cta2_text}
             </Link>
           </motion.div>
         </div>

@@ -7,12 +7,19 @@ import { ShoppingBag, Menu, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { getCart, getCartCount } from '@/lib/cart'
 
-export default function NavBar() {
+interface NavBarProps {
+  siteName?: string
+}
+
+export default function NavBar({ siteName = 'Maison & Co' }: NavBarProps) {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [cartCount, setCartCount] = useState(0)
   const pathname = usePathname()
   const isHome = pathname === '/'
+
+  // Hide entirely on admin routes
+  if (pathname.startsWith('/admin')) return null
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 60)
@@ -59,7 +66,7 @@ export default function NavBar() {
                 isTransparent ? 'text-surface' : 'text-foreground'
               }`}
             >
-              Maison & Co
+              {siteName}
             </Link>
 
             {/* Desktop nav */}

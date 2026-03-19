@@ -3,15 +3,21 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { SiteSettings, defaultSettings } from '@/lib/settings'
 
-export default function EditorialBanner() {
+interface EditorialBannerProps {
+  settings?: Partial<SiteSettings>
+}
+
+export default function EditorialBanner({ settings }: EditorialBannerProps) {
+  const s = { ...defaultSettings, ...settings }
+
   return (
     <section className="relative overflow-hidden" aria-label="Editorial banner" style={{ minHeight: '60vh' }}>
-      {/* Background */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="https://images.unsplash.com/photo-1449247709967-d4461a6a6103?w=1600&q=80"
-          alt="Maison & Co dining collection — luxury handcrafted furniture"
+          src={s.editorial_background_image || defaultSettings.editorial_background_image}
+          alt="Maison & Co furniture collection editorial"
           fill
           sizes="100vw"
           className="object-cover"
@@ -20,7 +26,6 @@ export default function EditorialBanner() {
         <div className="absolute inset-0 bg-foreground/75" />
       </div>
 
-      {/* Content */}
       <div className="relative z-10 min-h-[60vh] flex items-center">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 w-full py-20">
           <div className="max-w-2xl">
@@ -42,9 +47,7 @@ export default function EditorialBanner() {
               className="font-serif font-light text-surface leading-none tracking-tighter mb-8"
               style={{ fontSize: 'clamp(44px, 6vw, 80px)' }}
             >
-              Built for<br />
-              <em className="italic">generations,</em><br />
-              not seasons.
+              {s.editorial_headline}
             </motion.h2>
 
             <motion.p
@@ -65,7 +68,7 @@ export default function EditorialBanner() {
               transition={{ duration: 0.6, delay: 0.38 }}
             >
               <Link href="/products" className="btn btn-ghost-light text-[12px] px-8 py-4">
-                Discover the Collection
+                {s.editorial_cta_text}
               </Link>
             </motion.div>
           </div>
